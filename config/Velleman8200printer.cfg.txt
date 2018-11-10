@@ -1,0 +1,227 @@
+# Author: Martin Malmqvist
+# Verification and testing: Per Hjort
+
+# Config file for Velleman K8200 and 3Drag 3D printers
+# This is a working config file for the Klipper 3D printer firmware.
+# Copy the file into the /home/pi folder and boot up.
+# Depening on you setup, and as always you have to check all functions(axes, heaters endstops...), tune the PID values,
+# the pressure_advance and the acceleration etc.
+
+# See the example.cfg and example-extras.cfg files for a description of available parameters.
+
+[stepper_x]
+step_pin: ar54
+dir_pin: !ar55
+enable_pin: !ar38
+step_distance: .0125
+endstop_pin: ^ar3
+#endstop_pin: ^ar2
+position_endstop: 0
+position_max: 200
+homing_speed: 50
+
+[stepper_y]
+step_pin: ar60
+dir_pin: !ar61
+enable_pin: !ar56
+step_distance: .0125
+endstop_pin: ^ar14
+position_endstop: 0
+position_max: 200
+homing_speed: 50
+
+[stepper_z]
+step_pin: ar46
+dir_pin: !ar48
+enable_pin: !ar63
+step_distance: .0025
+endstop_pin: ^ar18
+
+position_endstop: 0.5
+# Set position_max to 200 if you have the original Z-axis setup.
+position_max: 250
+
+[extruder]
+step_pin: ar26
+# Remove the "!" from dir_pin if you have an original extruder
+dir_pin: !ar28
+enable_pin: !ar24
+# You will have to calculate your own step_distance.
+# This is for the belted extruder https://www.thingiverse.com/thing:339928
+step_distance: .0013333333333333
+nozzle_diameter: 0.400
+filament_diameter: 2.85
+heater_pin: ar10
+sensor_type: ATC Semitec 104GT
+sensor_pin: analog13
+# PID is calculated for original E3D
+control: pid
+pid_Kp=21.503 
+pid_Ki=1.103 
+pid_Kd=104.825
+#pid_integral_max:
+#   The maximum "windup" the integral term may accumulate. The default
+#   is to use the same value as max_power.
+#pwm_cycle_time: 0.100
+#   Time in seconds for each software PWM cycle of the heater. It is
+#   not recommended to set this unless there is an electrical
+#   requirement to switch the heater faster than 10 times a second.
+#   The default is 0.100 seconds.
+#min_extrude_temp: 170
+#   The minimum temperature (in Celsius) at which extruder move
+#   commands may be issued. The default is 170 Celsius.
+min_temp: 0
+max_temp: 250
+#   The maximum range of valid temperatures (in Celsius) that the
+#   heater must remain within. This controls a safety feature
+#   implemented in the micro-controller code - should the measured
+#   temperature ever fall outside this range then the micro-controller
+#   will go into a shutdown state. This check can help detect some
+#   heater and sensor hardware failures. Set this range just wide
+#   enough so that reasonable temperatures do not result in an
+#   error. These parameters must be provided.
+max_extrude_cross_section: 1.6
+max_extrude_only_accel: 6000
+max_extrude_only_distance: 200.0
+pressure_advance: 0.100
+pressure_advance_lookahead_time: 0.010
+
+[heater_bed]
+heater_pin: ar9
+sensor_type: ATC Semitec 104GT-2
+sensor_pin: analog14
+# PID is calculated for original heated bed, but tune your own!!!
+control: pid
+pid_Kp=75.283 
+pid_Ki=0.588 
+pid_Kd=2408.103
+#pid_integral_max:
+#   The maximum "windup" the integral term may accumulate. The default
+#   is to use the same value as max_power.
+#pwm_cycle_time: 0.100
+#   Time in seconds for each software PWM cycle of the heater. It is
+#   not recommended to set this unless there is an electrical
+#   requirement to switch the heater faster than 10 times a second.
+#   The default is 0.100 seconds.
+#min_extrude_temp: 170
+#   The minimum temperature (in Celsius) at which extruder move
+#   commands may be issued. The default is 170 Celsius.
+# a more crude way to control a heater
+#control: watermark
+#max_delta: 2.0
+#   On 'watermark' controlled heaters this is the number of degrees in
+#   Celsius above the target temperature before disabling the heater
+#   as well as the number of degrees below the target before
+#   re-enabling the heater. The default is 2 degrees Celsius.
+min_temp: 0
+max_temp: 130
+#   The maximum range of valid temperatures (in Celsius) that the
+#   heater must remain within. This controls a safety feature
+#   implemented in the micro-controller code - should the measured
+#   temperature ever fall outside this range then the micro-controller
+#   will go into a shutdown state. This check can help detect some
+#   heater and sensor hardware failures. Set this range just wide
+#   enough so that reasonable temperatures do not result in an
+#   error. These parameters must be provided.
+
+# Print cooling fan (omit section if fan not present).
+[fan]
+pin: ar8
+#   PWM output pin controlling the fan. This parameter must be
+#   provided.
+#max_power: 1.0
+#   The maximum power (expressed as a value from 0.0 to 1.0) that the
+#   pin may be set to. The value 1.0 allows the pin to be set fully
+#   enabled for extended periods, while a value of 0.5 would allow the
+#   pin to be enabled for no more than half the time. This setting may
+#   be used to limit the total power output (over extended periods) to
+#   the fan. If this value is less than 1.0 then fan speed requests
+#   will be scaled between zero and max_power (for example, if
+#   max_power is .9 and a fan speed of 80% is requested then the fan
+#   power will be set to 72%). The default is 1.0.
+#shutdown_speed: 0
+#   The desired fan speed (expressed as a value from 0.0 to 1.0) if
+#   the micro-controller software enters an error state. The default
+#   is 0.
+#cycle_time: 0.010
+#   The amount of time (in seconds) for each PWM power cycle to the
+#   fan. It is recommended this be 10 milliseconds or greater when
+#   using software based PWM. The default is 0.010 seconds.
+#hardware_pwm: False
+#   Enable this to use hardware PWM instead of software PWM. The
+#   default is False.
+kick_start_time: 0.500
+#   Time (in seconds) to run the fan at full speed when first enabling
+#   it (helps get the fan spinning). The default is 0.100 seconds.
+
+
+#the LCD is untested.
+# "RepRapDiscount 2004 Smart Controller" type displays
+#[display]
+#lcd_type: hd44780
+#rs_pin: ar27
+#e_pin: ar29
+#d4_pin: ar37
+#d5_pin: ar35
+#d6_pin: ar33
+#d7_pin: ar31
+#encoder_pins: ^ar16, ^ar17
+#click_pin: ^!ar23
+
+[mcu]
+#  serial may need to be changed depending on initial setup
+#The general way to find a more stable USB serial port is to run "ls -l /dev/serial/by-id/" from an ssh terminal
+#serial: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+#otherwise try the USB like ttyUSB0
+serial: /dev/ttyUSB0
+pin_map: arduino
+#   This option may be used to enable Arduino pin name aliases. The
+#   default is to not enable the aliases.
+#restart_method:
+#   This controls the mechanism the host will use to reset the
+#   micro-controller. The choices are 'arduino', 'rpi_usb', and
+#   'command'. The 'arduino' method (toggle DTR) is common on Arduino
+#   boards and clones. The 'rpi_usb' method is useful on Raspberry Pi
+#   boards with micro-controllers powered over USB - it briefly
+#   disables power to all USB ports to accomplish a micro-controller
+#   reset. The 'command' method involves sending a Klipper command to
+#   the micro-controller so that it can reset itself. The default is
+#   'arduino' if the micro-controller communicates over a serial port,
+#   'command' otherwise.
+
+[printer]
+kinematics: cartesian
+max_velocity: 300
+max_accel: 1000
+max_z_velocity: 10
+max_z_accel: 100
+max_accel_to_decel: 200
+#   A pseudo acceleration (in mm/s^2) controlling how fast the
+#   toolhead may go from acceleration to deceleration. It is used to
+#   reduce the top speed of short zig-zag moves (and thus reduce
+#   printer vibration from these moves). The default is half of
+#   max_accel.
+square_corner_velocity: 5.0
+#   The maximum velocity (in mm/s) that the toolhead may travel a 90
+#   degree corner at. A non-zero value can reduce changes in extruder
+#   flow rates by enabling instantaneous velocity changes of the
+#   toolhead during cornering. This value configures the internal
+#   centripetal velocity cornering algorithm; corners with angles
+#   larger than 90 degrees will have a higher cornering velocity while
+#   corners with angles less than 90 degrees will have a lower
+#   cornering velocity. If this is set to zero then the toolhead will
+#   decelerate to zero at each corner. The default is 5mm/s.
+
+#  This section might be good you uncomment if you are getting studdering during short vertex prints(typically circles).
+#  A virtual sdcard may be useful if the host machine is not fast
+#  enough to run OctoPrint well. It allows the Klipper host software to
+#  directly print gcode files stored in a directory on the host using
+#  standard sdcard G-Code commands (eg, M24).
+[virtual_sdcard]
+path: ~/.octoprint/uploads/
+#   The path of the local directory on the host machine to look for
+#   g-code files. This is a read-only directory (sdcard file writes
+#   are not supported). One may point this to OctoPrint's upload
+#   directory (generally ~/.octoprint/uploads/ ). This parameter must
+#   be provided.
+
